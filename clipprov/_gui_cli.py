@@ -10,6 +10,7 @@ This script is launched by absolute path from the GUI controller; it registers
 from __future__ import annotations
 
 import importlib.util
+import os
 import sys
 from pathlib import Path
 
@@ -30,7 +31,8 @@ def _pin_checkout_package() -> None:
 
 
 def main() -> None:
-    _pin_checkout_package()
+    if not getattr(sys, "frozen", False):
+        _pin_checkout_package()
     if len(sys.argv) == 3 and sys.argv[1] == "--gui-resolve-report":
         import json
 
@@ -45,6 +47,11 @@ def main() -> None:
         return
     from clipprov.cli import main as cli_main
 
+    if getattr(sys, "frozen", False):
+        if "LD_LIBRARY_PATH_ORIG" in os.environ:
+            os.environ["LD_LIBRARY_PATH"] = os.environ["LD_LIBRARY_PATH_ORIG"]
+        else:
+            os.environ.pop("LD_LIBRARY_PATH", None)
     cli_main()
 
 

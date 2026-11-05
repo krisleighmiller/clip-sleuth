@@ -7,10 +7,17 @@ library. Matching is visual-first; optional audio only corroborates an accepted
 visual result. This is a local Python CLI and Tk desktop app, not a hosted
 service or a claim of universal identification.
 
+## Linux download
+
+The [v0.1.0 GitHub Release](https://github.com/krisleighmiller/clip-sleuth/releases/tag/v0.1.0)
+offers an experimental Linux x86-64 desktop archive. It includes Python and
+Tk, but requires system `ffmpeg` and `ffprobe` on PATH. Extract the archive
+and run `clip-sleuth/clip-sleuth`; see its `README-LINUX.md` for support limits.
+There is no Windows/macOS binary or Python-registry publication.
+
 ## Install from this source checkout
 
-There is no published package or supported downloadable binary yet. On Linux
-with Python 3.11 or newer, install `ffmpeg` and `ffprobe` on PATH and ensure
+On Linux with Python 3.11 or newer, install `ffmpeg` and `ffprobe` on PATH and ensure
 Python's Tkinter package is installed if you want the GUI (often a separate
 `python3-tk` OS package). A graphical display is also required for the GUI.
 From this checkout, in a fresh virtual environment:
@@ -99,8 +106,8 @@ by the original OpenCode session and assistant-message model records for the
 trial; it is not an assertion that OpenRouter itself grants output rights.
 
 The project is licensed under the [MIT License](LICENSE), copyright 2026
-Kristen Leigh Miller. This is the public source repository; the package is not
-published to a Python registry.
+Kristen Leigh Miller. This is the public source repository and home of the
+Linux preview download; the package is not published to a Python registry.
 
 ## Development
 

@@ -147,6 +147,42 @@ def test_child_environment_and_launcher_are_pinned(monkeypatch):
     assert captured["kwargs"]["start_new_session"] is True
 
 
+def test_frozen_gui_relaunches_its_own_worker_without_python_script(monkeypatch):
+    captured = {}
+    backend(monkeypatch, 'print(\'{"status":"complete","masters":1}\')', captured)
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    controller = CLIController()
+    controller.start(["index", "library", "--out", "index"])
+    assert controller.wait(5)
+    assert captured["args"] == [sys.executable, "--gui-worker", "index", "library", "--out", "index"]
+    assert captured["kwargs"]["cwd"] is None
+
+
+def test_frozen_worker_uses_bundled_package_without_checkout_pin(monkeypatch):
+    from clipprov import _gui_cli, cli
+
+    calls = []
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "argv", ["clip-sleuth", "index", "library"])
+    monkeypatch.setattr(_gui_cli, "_pin_checkout_package", lambda: calls.append("pin"))
+    monkeypatch.setattr(cli, "main", lambda: calls.append("cli"))
+    _gui_cli.main()
+    assert calls == ["cli"]
+
+
+def test_frozen_worker_restores_system_loader_for_ffmpeg(monkeypatch):
+    from clipprov import _gui_cli, cli
+
+    monkeypatch.setattr(sys, "frozen", True, raising=False)
+    monkeypatch.setattr(sys, "argv", ["clip-sleuth", "index", "library"])
+    monkeypatch.setenv("LD_LIBRARY_PATH", "/frozen/_internal")
+    monkeypatch.setenv("LD_LIBRARY_PATH_ORIG", "/system/lib")
+    observed = []
+    monkeypatch.setattr(cli, "main", lambda: observed.append(os.environ.get("LD_LIBRARY_PATH")))
+    _gui_cli.main()
+    assert observed == ["/system/lib"]
+
+
 def test_match_dir_argv_exposes_combined_speed_and_geometry_opt_ins(monkeypatch, tmp_path):
     controller = CLIController()
     captured = {}

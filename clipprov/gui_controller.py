@@ -121,10 +121,15 @@ class CLIController:
                 job = uuid.uuid4().hex
                 for name in buffers:
                     logs[name] = (log_root / f"{job}.{name}.log").open("w", encoding="utf-8")
+            frozen = getattr(sys, "frozen", False)
             launcher = Path(__file__).with_name("_gui_cli.py")
+            command = (
+                [sys.executable, "--gui-worker", *args]
+                if frozen else [sys.executable, str(launcher), *args]
+            )
             process = subprocess.Popen(
-                [sys.executable, str(launcher), *args],
-                cwd=self._get_cloned_clipprov_path(),
+                command,
+                cwd=None if frozen else self._get_cloned_clipprov_path(),
                 env=self._build_cli_env(),
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
