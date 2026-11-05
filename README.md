@@ -99,7 +99,8 @@ by the original OpenCode session and assistant-message model records for the
 trial; it is not an assertion that OpenRouter itself grants output rights.
 
 The project is licensed under the [MIT License](LICENSE), copyright 2026
-Kristen Leigh Miller. The GitHub repository has not been published yet.
+Kristen Leigh Miller. This is the public source repository; the package is not
+published to a Python registry.
 
 ## Development
 
