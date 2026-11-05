@@ -1,0 +1,5 @@
+prune tests
+prune fixtures
+include README.md
+include pyproject.toml
+recursive-include docs *.md

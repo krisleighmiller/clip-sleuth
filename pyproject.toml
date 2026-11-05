@@ -1,0 +1,57 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clip-provenance"
+version = "0.1.0"
+description = "Find where a clip came from in your own video library."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: POSIX :: Linux",
+]
+dependencies = [
+    "pydantic>=2.0",
+    "click>=8.0",
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+
+[project.scripts]
+clip-prov = "clipprov.cli:main"
+clip-prov-gui = "clipprov.gui:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["clipprov*"]
+
+[tool.setuptools.data-files]
+"share/doc/clip-provenance" = [
+    "docs/evaluation.md",
+    "docs/confidence-evidence.md",
+    "docs/batch-workflow.md",
+    "docs/v1-input-contract.md",
+    "docs/geometry.md",
+    "docs/audio-qualification.md",
+    "docs/index-schema.md",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+extend-exclude = ["fixtures"]
